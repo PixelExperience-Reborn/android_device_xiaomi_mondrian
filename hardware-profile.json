@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "project": "PixelExperience-Reborn",
+  "base": "AOSP 17",
+  "device": {
+    "codename": "mondrian",
+    "commercial_names": [
+      "POCO F5 Pro",
+      "Redmi K60"
+    ],
+    "soc": "SM8475",
+    "bsp_family": "taro",
+    "product": "pe_mondrian"
+  },
+  "confirmed_source_based": {
+    "logical_density_dpi": 560,
+    "source_device_board": "LF52406/mondrian_android_device_xiaomi_mondrian@lineage-24.0:BoardConfig.mk"
+  },
+  "reference_hardware_only": {
+    "panel": {
+      "family": "M11A",
+      "native_resolution_px": [
+        1440,
+        3200
+      ],
+      "source": "LineageOS/android_kernel_xiaomi_sm8450-devicetrees@lineage-24.0:qcom/display/display/mondrian-sde-display-mtp.dtsi",
+      "physical_panel_revision": null,
+      "refresh_rate_qualified": false
+    },
+    "touch": {
+      "controller_dts_compatible": "goodix,gt9916S",
+      "bus": "spi",
+      "spi_max_frequency_hz": 15000000,
+      "irq_gpio": 21,
+      "reset_gpio": 20,
+      "firmware": "goodix_firmware_m11a.bin",
+      "config": "goodix_cfg_group_m11a.bin",
+      "manufacturer_driver_compatible": "goodix,brl-d",
+      "matching_driver_selected": false,
+      "physical_firmware_revision": null,
+      "source": "LineageOS/android_kernel_xiaomi_sm8450-devicetrees@lineage-24.0:qcom/mondrian-sm8475.dtsi"
+    },
+    "fingerprint": {
+      "dts_compatible": "goodix,fingerprint",
+      "separate_from_touch": true,
+      "hardware_hal_selected": false,
+      "udfps_end_to_end_tested": false
+    }
+  },
+  "production_gates": {
+    "kernel_and_modules_built": false,
+    "dtbo_built": false,
+    "panel_verified_on_hardware": false,
+    "touch_controller_verified_on_hardware": false,
+    "udfps_verified_on_hardware": false,
+    "proprietary_vendor_verified": false,
+    "fbe_verified": false,
+    "avb_verified": false,
+    "boot_verified": false
+  },
+  "excluded_from_initial_build": [
+    "FM radio",
+    "unverified Xiaomi display settings patches",
+    "unverified haptic/framework patch scripts",
+    "LineageOS product inheritance",
+    "unverified proprietary firmware",
+    "AVB test keys"
+  ]
+}

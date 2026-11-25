@@ -4,7 +4,7 @@
 # Source (pinned in device/xiaomi/sm8450-common/proprietary/ota-source.json):
 #   official Xiaomi OTA OS3.0.8.0.VMNCNXM, Redmi/mondrian/mondrian:15/AQ3A.250226.002
 #   vendor partition: Redmi/mondrian/mondrian:12/SKQ1.230401.001 (vendor API 31)
-# Format: <path on the device>|<SHA-256 of the file in that OTA>
+# Format: <partition>/<path>|<SHA-256 of the file in that OTA>  (vendor/ or odm/)
 #
 # Only closed components without source are listed. Everything we build from
 # source (display, audio PAL/AGM/HAL, IPACM, power, thermal HAL, Wi-Fi HAL, ...)
@@ -880,7 +880,8 @@ vendor/etc/usecaseKvManager.xml|20d70c26d7188f581e02b66135e060c4bdf5daefcaecc3ee
 vendor/firmware/aw882xx_acf.bin|ce0e16d22380565114f56e6a02e4f85959160baccc6c163df6ecaf9db20cbf9e
 
 # === Fingerprint: Xiaomi fingerprint daemon (mfp-daemon) ===
-# No source exists. Kernel: goodix_fp.
+# No source exists. Kernel: goodix_fp. mfp-daemon links the odm library vendor.xiaomi.hardware.fx.tunnel@1.0.
+odm/lib64/vendor.xiaomi.hardware.fx.tunnel@1.0.so|fa43a135f96dc1393c231b1e6c3a62f6698861429292eeb5b1078822f5ac6187
 vendor/bin/hw/mfp-daemon|9f875a089bf126ba0bb246a5407f14ac360e4dfac8bd1d20c3ec9b84bf07b28b
 vendor/etc/init/init.mfp-daemon.rc|f2c0e36a22bb7990cfe561ace23f6887c939eeca41ea9668100e904bb54e2af1
 vendor/lib64/com.fingerprints.extension@3.0.so|454122d13d3a98c2ca91bacb73d5fa33b237703c8e344dd63e0b7ff85b8c12bc
@@ -894,12 +895,6 @@ vendor/firmware/goodix_cfg_group_m11a.bin|a730e3f1238d651c531bc375fb477c6036f711
 vendor/firmware/goodix_cfg_group_m11a_new.bin|8e66c3d5753d85a94a0d9769c1c4a894da0ffe43020d19fc658119e82e291e7f
 vendor/firmware/goodix_firmware_m11a.bin|1e647510cdc4c0293aa06fa7cb5d0a2f3558fcc151ac2785786fa6c31b560509
 vendor/firmware/goodix_firmware_m11a_new.bin|1e647510cdc4c0293aa06fa7cb5d0a2f3558fcc151ac2785786fa6c31b560509
-
-# === Consumer IR transmitter ===
-# Closed consumerir.qcom.so.
-vendor/bin/hw/android.hardware.ir@1.0-service|a0514241d64e3338b00b2375ff459311ffad1fbad5998911c0a47beb0ba4cdaf
-vendor/etc/init/android.hardware.ir@1.0-service.rc|b12813abf890b6a8776c65bd9e95a3b5bf17ae8fc0fe8c3637277e75d3b9e159
-vendor/lib64/hw/consumerir.qcom.so|1f596199844a694b90554d6f069d38d73cf433de7031f5f86ced6667161fe363
 
 # === Xiaomi battery authentication (batterysecret) ===
 # No source exists.

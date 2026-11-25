@@ -51,10 +51,12 @@ kernel disclosure, Android AOSP documentation, and upstream Linux/Qualcomm sourc
 
 ## 2026-11-25 — Gate 2 progress: proprietary file lists
 
-- `proprietary-files.txt` lists the 881 mondrian-specific closed files of the
+- `proprietary-files.txt` lists the 879 mondrian-specific closed files of the
   official OTA OS3.0.8.0.VMNCNXM with SHA-256 (camera HAL and sensor modules,
-  DSP modules, sensor/audio configuration and calibration, fingerprint daemon,
-  M11A touch firmware, IR, battery authentication, thermal and NFC configuration).
+  DSP modules, sensor/audio configuration and calibration, fingerprint daemon
+  with its odm library, M11A touch firmware, battery authentication, thermal
+  and NFC configuration). Consumer IR needs no blob: an AIDL HAL over the
+  kernel's `/dev/ir_spi` goes to `hardware/xiaomi`.
   The SoC-level list lives in `device/xiaomi/sm8450-common`.
 - The files are reproduced from the pinned OTA, never redistributed; method,
   exclusions and kernel/Android 17 compatibility evidence:

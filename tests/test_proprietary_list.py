@@ -9,13 +9,17 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 LIST = ROOT / "proprietary-files.txt"
-LINE = re.compile(r"^(vendor/[A-Za-z0-9_@+.,/-]+)\|([0-9a-f]{64})$")
+LINE = re.compile(r"^((?:vendor|odm)/[A-Za-z0-9_@+.,/-]+)\|([0-9a-f]{64})$")
 
 FORBIDDEN = [
     r"libmialgoengine\.so$", r"/com\.xiaomi\.plugin\.", r"campostproc", r"/camera\.xiaomi\.so$",
     r"/bin/hw/vendor\.xiaomi\.", r"soter", r"mlipay", r"dolby", r"wfd", r"perf-hal",
     r"^vendor/etc/vintf/", r"/init\.(qcom|target)\.rc$", r"/rfsa/adsp/libVpp", r"tracker_6dof",
     r"_(8250|8350)\.so$",
+    # IR is our own AIDL HAL over the kernel's /dev/ir_spi (CONFIG_IR_SPI); no IR blob.
+    r"consumerir", r"android\.hardware\.ir@",
+    # AOSP libraries are built from the AOSP 17 sources, not copied from the OTA.
+    r"/libcodec2_(vndk|hidl)", r"/libhidltransport\.so$",
 ]
 # The five mondrian cameras: wide (two module vendors), front, ultra-wide, macro.
 CAMERA_SENSORS = ["mondrian_aac_ov64b40_wide_ii", "mondrian_sunny_ov64b40_wide_i", "ov16a1q_front",
@@ -71,6 +75,7 @@ class MondrianProprietaryList(unittest.TestCase):
                          "vendor/lib64/hw/camera.qcom.so", "vendor/firmware/CAMERA_ICP.mdt",
                          "vendor/firmware/goodix_firmware_m11a.bin", "vendor/firmware/goodix_cfg_group_m11a.bin",
                          "vendor/firmware/aw882xx_acf.bin", "vendor/bin/hw/mfp-daemon",
+                         "odm/lib64/vendor.xiaomi.hardware.fx.tunnel@1.0.so",
                          "vendor/etc/sensors/hals.conf"):
             self.assertIn(required, self.paths)
 

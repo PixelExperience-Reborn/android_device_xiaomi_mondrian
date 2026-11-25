@@ -48,3 +48,16 @@ and neither a Soong build nor device-level validation has been completed.
 References are technical research, **not ROM source dependencies**:
 original PixelExperience official device architecture, official Xiaomi
 kernel disclosure, Android AOSP documentation, and upstream Linux/Qualcomm sources.
+
+## 2026-11-25 — Gate 2 progress: proprietary file lists
+
+- `proprietary-files.txt` lists the 881 mondrian-specific closed files of the
+  official OTA OS3.0.8.0.VMNCNXM with SHA-256 (camera HAL and sensor modules,
+  DSP modules, sensor/audio configuration and calibration, fingerprint daemon,
+  M11A touch firmware, IR, battery authentication, thermal and NFC configuration).
+  The SoC-level list lives in `device/xiaomi/sm8450-common`.
+- The files are reproduced from the pinned OTA, never redistributed; method,
+  exclusions and kernel/Android 17 compatibility evidence:
+  `device/xiaomi/sm8450-common/docs/PROPRIETARY_FILES.md`.
+- Still open in this gate: VINTF manifest (level 7), init scripts for the
+  camera provider and platform services, build rules, SELinux.

@@ -1,0 +1,36 @@
+name: Verify mondrian proprietary files against the official Xiaomi OTA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['bringup/**']
+    paths:
+      - proprietary-files.txt
+      - .github/workflows/proprietary-verify.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check out the extraction tool and pinned OTA (sm8450-common, same branch)
+        run: |
+          set -euo pipefail
+          url=https://github.com/PixelExperience-Reborn/android_device_xiaomi_sm8450-common
+          git ls-remote --exit-code --heads "$url" "$GITHUB_REF_NAME" >/dev/null \
+            || { echo "::error::sm8450-common has no branch $GITHUB_REF_NAME with the extraction tool"; exit 1; }
+          git clone -q --depth 1 -b "$GITHUB_REF_NAME" "$url" "$RUNNER_TEMP/common"
+      - name: Install EROFS tools
+        run: sudo apt-get install -y -q erofs-utils
+      - name: Reproduce the vendor partition and check every listed file
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/common/tools/extract_proprietary.py" --verify-only --work "$RUNNER_TEMP" \
+            --list "proprietary-files.txt=$RUNNER_TEMP/out/mondrian"
+          echo "[PASS] Every mondrian file matches the official OTA OS3.0.8.0.VMNCNXM" >> "$GITHUB_STEP_SUMMARY"

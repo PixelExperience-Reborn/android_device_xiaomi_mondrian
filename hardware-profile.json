@@ -10,7 +10,7 @@
     ],
     "soc": "SM8475",
     "bsp_family": "taro",
-    "product": "pe_mondrian"
+    "product": "aosp_mondrian"
   },
   "confirmed_source_based": {
     "logical_density_dpi": 560,

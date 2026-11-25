@@ -1,14 +1,14 @@
 # PixelExperience-Reborn — mondrian AOSP 17 bring-up gates
 
 Scope: **POCO F5 Pro / Redmi K60 (mondrian, SM8475)** only.
-Branch: `seventeen`. Product: `pe_mondrian`. Source base: independently
+Branch: `seventeen`. Product: `aosp_mondrian`. Source base: independently
 maintained PE-Reborn on **official AOSP 17**.
 
 This repository is an independent product scaffold. It is **not bootable**,
 and neither a Soong build nor device-level validation has been completed.
 
 ## Gate 0 — product discovery (open)
-- [x] Register `pe_mondrian` in `AndroidProducts.mk`.
+- [x] Register `aosp_mondrian` in `AndroidProducts.mk`.
 - [x] Inherit only PE-Reborn `vendor/aosp` and our own device/common trees.
 - [ ] Synchronize the vetted AOSP 17 manifest and PE vendor A17 changes.
 - [ ] Run platform-native lunch/product discovery with an actual AOSP 17 release configuration.

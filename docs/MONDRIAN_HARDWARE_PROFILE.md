@@ -1,7 +1,7 @@
 # PE-Reborn AOSP 17 — mondrian hardware configuration
 
 This is the **independently authored** device branch for POCO F5 Pro /
-Redmi K60, physical SM8475, product `pe_mondrian`. It is not a
+Redmi K60, physical SM8475, product `aosp_mondrian`. It is not a
 LineageOS port and is **not currently bootable**.
 
 ## Reviewed implementation
@@ -32,7 +32,7 @@ the new product, especially not as side-effecting build scripts.
 
 ## Integration with PE-Reborn common tree
 
-- Device product: `device/xiaomi/mondrian/pe_mondrian.mk`.
+- Device product: `device/xiaomi/mondrian/aosp_mondrian.mk`.
 - Device and hardware definition: `device/xiaomi/mondrian/device.mk`.
 - Shared board: `device/xiaomi/sm8450-common/BoardConfigCommon.mk`.
 - Platform: official Android 17 and separately reviewed PE `vendor/aosp`.

@@ -1,0 +1,66 @@
+name: AOSP17 aosp_mondrian real build (ServerHive)
+
+# GitHub disabled Actions for the manifest fork, so the real build runs
+# from this repository. The build itself is unchanged: it syncs the
+# reviewed manifest profile aosp17_pe_mondrian_build.xml (which pins this
+# device tree by commit) and runs the manifest's own build script.
+on:
+  push:
+    branches: ['bringup/a17-mondrian-oem-vendor-os3-20261125']
+    paths: ['.github/workflows/aosp17-build.yml']
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'graph = lunch + m nothing; vendor = m vendorimage; full = m'
+        type: choice
+        default: graph
+        options: [graph, vendor, full]
+      release:
+        description: 'TARGET_RELEASE (cp2a = stable release of android-17.0.0_r1)'
+        default: cp2a
+      variant:
+        type: choice
+        default: userdebug
+        options: [userdebug, eng, user]
+
+concurrency:
+  group: aosp17-mondrian-build
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  MANIFEST_BRANCH: bringup/a17-mondrian-full-build-20261125
+
+jobs:
+  build:
+    runs-on:
+      group: mondrian-heavy
+      labels: pe-mondrian-heavy
+    timeout-minutes: 1200
+    steps:
+      - name: Check out the manifest and its build tools
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/manifest"
+          git clone -q --depth 1 -b "$MANIFEST_BRANCH" \
+            https://github.com/PixelExperience-Reborn/manifest "$RUNNER_TEMP/manifest"
+          git -C "$RUNNER_TEMP/manifest" log -1 --format='manifest %h %s'
+      - name: Check the build profile
+        run: python3 "$RUNNER_TEMP/manifest/tools/check_mondrian_build_profile.py"
+      - name: Sync and build aosp_mondrian
+        env:
+          STAGE: ${{ inputs.stage || 'graph' }}
+          RELEASE: ${{ inputs.release || 'cp2a' }}
+          VARIANT: ${{ inputs.variant || 'userdebug' }}
+          DO_SYNC: 'true'
+        run: bash "$RUNNER_TEMP/manifest/tools/aosp17_mondrian_build.sh"
+      - name: Save build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aosp17-mondrian-${{ inputs.stage || 'graph' }}-logs
+          if-no-files-found: ignore
+          retention-days: 14
+          path: ${{ runner.temp }}/aosp17-logs/

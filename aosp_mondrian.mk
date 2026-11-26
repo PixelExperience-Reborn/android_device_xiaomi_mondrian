@@ -16,6 +16,7 @@ $(call inherit-product, device/xiaomi/mondrian/device.mk)
 TARGET_BOOT_ANIMATION_RES := 1440
 # Google apps (MindTheGapps, vendor/gapps), as every PE build ships them.
 WITH_GMS := true
+CUSTOM_MAINTAINER := LF5
 $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 
 PRODUCT_NAME := aosp_mondrian

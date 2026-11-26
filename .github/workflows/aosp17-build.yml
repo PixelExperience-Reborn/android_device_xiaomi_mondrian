@@ -40,6 +40,23 @@ jobs:
       labels: pe-mondrian-heavy
     timeout-minutes: 1200
     steps:
+      # GitHub refuses anonymous git requests from the build server after
+      # the repo syncs of the whole tree (HTTP 403). Every git request of
+      # this job to github.com carries the job token, through environment
+      # variables of this job only: the server's git configuration and the
+      # owner's own builds on it are left untouched.
+      - name: Authenticate git to GitHub for this job
+        env:
+          JOB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          auth="$(printf 'x-access-token:%s' "$JOB_TOKEN" | base64 -w0)"
+          echo "::add-mask::$auth"
+          {
+            echo "GIT_CONFIG_COUNT=1"
+            echo "GIT_CONFIG_KEY_0=http.https://github.com/.extraheader"
+            echo "GIT_CONFIG_VALUE_0=AUTHORIZATION: basic $auth"
+          } >> "$GITHUB_ENV"
       - name: Check out the manifest and its build tools
         run: |
           set -euo pipefail

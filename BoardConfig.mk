@@ -30,7 +30,9 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(KERNEL_PATH)/vendor_ramdisk/modules.load))
 BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(KERNEL_PATH)/vendor_ramdisk/modules.load.recovery))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(KERNEL_PATH)/vendor_ramdisk/modules.blocklist
 BOARD_USES_VENDOR_DLKMIMAGE := true
+BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(KERNEL_PATH)/vendor_dlkm/modules.blocklist
 BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/vendor_dlkm/*.ko)
 BOARD_VENDOR_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(KERNEL_PATH)/vendor_dlkm/modules.load))

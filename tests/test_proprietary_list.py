@@ -9,7 +9,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 LIST = ROOT / "proprietary-files.txt"
-LINE = re.compile(r"^((?:vendor|odm)/[A-Za-z0-9_@+.,/-]+)\|([0-9a-f]{64})$")
+# <file>[;<extract-utils argument>...]|<sha256>, as tools/extract_proprietary.py reads it.
+LINE = re.compile(r"^((?:vendor|odm)/[A-Za-z0-9_@+.,/-]+)(?:;[A-Z_]+(?:=[A-Za-z0-9_@+.,/-]+)?)*\|([0-9a-f]{64})$")
 
 FORBIDDEN = [
     r"libmialgoengine\.so$", r"/com\.xiaomi\.plugin\.", r"campostproc", r"/camera\.xiaomi\.so$",

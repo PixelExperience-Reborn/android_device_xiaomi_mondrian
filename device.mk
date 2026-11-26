@@ -1,10 +1,12 @@
-# PE-Reborn mondrian device product definitions.
-LOCAL_PATH := $(call my-dir)
+# SPDX-License-Identifier: Apache-2.0
+#
+# PixelExperience-Reborn Android 17: Xiaomi mondrian (POCO F5 Pro / Redmi K60).
 
 $(call inherit-product, device/xiaomi/sm8450-common/common.mk)
 
-# Pending hardware-qualified implementations:
-# - Verified mondrian vendor blobs and firmware provenance
-# - Fstab/init, VINTF, SELinux, graphics, audio, radio, camera, NFC
-# - In-display fingerprint, illumination, sensors and touch controller
-# Do not add HAL packages or proprietary services without an ABI review.
+# Kernel image from the prebuilt release (see BoardConfig.mk).
+PRODUCT_COPY_FILES += \
+    device/xiaomi/mondrian-kernel/Image:kernel
+
+# mondrian launched with Android 13 (stock ro.product.first_api_level=33).
+PRODUCT_SHIPPING_API_LEVEL := 33

@@ -17,3 +17,15 @@ PRODUCT_COPY_FILES += \
 
 # mondrian launched with Android 13 (stock ro.product.first_api_level=33).
 PRODUCT_SHIPPING_API_LEVEL := 33
+
+# Recovery: the audio/ADSP kernel modules init.recovery.qcom.rc loads before
+# it starts the ADSP (battery status), in the stock order of OS3.0.8.0.
+# Their other dependencies are in modules.load.recovery of vendor_boot.
+# (device/xiaomi/mondrian-kernel/Android.bp installs them.)
+PRODUCT_PACKAGES += \
+    mondrian_recovery_q6_pdr_dlkm \
+    mondrian_recovery_q6_notifier_dlkm \
+    mondrian_recovery_snd_event_dlkm \
+    mondrian_recovery_gpr_dlkm \
+    mondrian_recovery_spf_core_dlkm \
+    mondrian_recovery_adsp_loader_dlkm

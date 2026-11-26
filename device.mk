@@ -7,6 +7,10 @@ $(call inherit-product, device/xiaomi/sm8450-common/common.mk)
 # Proprietary files of the stock OS3.0.8.0 firmware.
 $(call inherit-product, vendor/xiaomi/mondrian/mondrian-vendor.mk)
 
+# Soong namespace of this tree (imported by the vendor build rules).
+PRODUCT_SOONG_NAMESPACES += \
+    device/xiaomi/mondrian
+
 # Kernel image from the prebuilt release (see BoardConfig.mk).
 PRODUCT_COPY_FILES += \
     device/xiaomi/mondrian-kernel/Image:kernel

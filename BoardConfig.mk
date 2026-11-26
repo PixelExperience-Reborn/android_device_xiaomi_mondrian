@@ -37,3 +37,6 @@ BOARD_VENDOR_KERNEL_MODULES_LOAD := \
 
 # Display: M11A, 1440x3200 WQHD+.
 TARGET_SCREEN_DENSITY := 560
+
+# Proprietary files
+include vendor/xiaomi/mondrian/BoardConfigVendor.mk

@@ -11,6 +11,11 @@ $(call inherit-product, vendor/xiaomi/mondrian/mondrian-vendor.mk)
 PRODUCT_SOONG_NAMESPACES += \
     device/xiaomi/mondrian
 
+# odm ueventd rules: the display feature device of the fingerprint under the
+# display (/dev/mi_display).
+PRODUCT_COPY_FILES += \
+    device/xiaomi/mondrian/rootdir/etc/ueventd.odm.rc:$(TARGET_COPY_OUT_ODM)/etc/ueventd.rc
+
 # Kernel image from the prebuilt release (see BoardConfig.mk).
 PRODUCT_COPY_FILES += \
     device/xiaomi/mondrian-kernel/Image:kernel

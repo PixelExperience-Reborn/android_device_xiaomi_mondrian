@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# PixelExperience-Reborn Android 17: odm ueventd rules of mondrian, from the
+# stock OS3.0.8.0 odm/etc/ueventd.rc. The display feature device of the
+# kernel (mondrian_fod: local HBM of the fingerprint under the display) lives
+# in /dev/mi_display; the fingerprint HAL (system) and the composer
+# (graphics) use it, so it is not world-writable as in stock. The trusted VM
+# loader (vmmgr is not shipped) and the NFC tag chip of another model are
+# left out.
+
+subsystem mi_display
+    devname uevent_devpath
+    dirname /dev/mi_display
+
+/dev/mi_display/*         0660   system     graphics

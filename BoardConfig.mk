@@ -40,5 +40,9 @@ BOARD_VENDOR_KERNEL_MODULES_LOAD := \
 # Display: M11A, 1440x3200 WQHD+.
 TARGET_SCREEN_DENSITY := 560
 
+# Properties of the stock OS3.0.8.0 vendor specific to mondrian (fingerprint
+# under the display, panel, Dalvik heap), after those of sm8450-common.
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
+
 # Proprietary files
 include vendor/xiaomi/mondrian/BoardConfigVendor.mk

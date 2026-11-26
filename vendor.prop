@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# PixelExperience-Reborn Android 17: vendor properties of mondrian (POCO F5 Pro / Redmi K60).
+#
+# From the stock OS3.0.8.0.VMNCNXM vendor/build.prop, keeping only what the
+# components this build ships (stock Qualcomm/Xiaomi vendor files listed in
+# proprietary-files.txt) and AOSP read. Left out: values the build system
+# generates (build, product, board, bionic, VNDK), MIUI features and their
+# services (display feature, MiSound, Dolby, karaoke, haptic effects,
+# charging policy, region and roaming defaults), video VPP/FRC, FM radio.
+
+# Fingerprint under the display (FOD): Goodix sensor; location and size in 1440x3200 panel pixels
+persist.vendor.sys.fp.expolevel=0x88
+persist.vendor.sys.fp.fod.location.X_Y=596,2758
+persist.vendor.sys.fp.fod.size.width_height=248,248
+ro.hardware.fp.fod.location=low
+ro.hardware.fp.fod.need.X_Y=false
+ro.hardware.fp.fod.touch.ctl.version=2.0
+ro.hardware.fp.fod=true
+ro.hardware.fp.mievent=true
+
+# SurfaceFlinger: M11A OLED panel
+debug.sf.auto_latch_unsignaled=0
+debug.sf.disable_client_composition_cache=1
+debug.sf.enable_advanced_sf_phase_offset=1
+debug.sf.enable_gl_backpressure=1
+debug.sf.enable_hwc_vds=0
+debug.sf.high_fps_early_gl_phase_offset_ns=-2000000
+debug.sf.high_fps_early_phase_offset_ns=-4000000
+debug.sf.high_fps_late_app_phase_offset_ns=1000000
+debug.sf.high_fps_late_sf_phase_offset_ns=-2000000
+debug.sf.hw=0
+debug.sf.latch_unsignaled=1
+debug.sf.predict_hwc_composition_strategy=0
+debug.sf.set_idle_timer_ms=1100
+debug.sf.treat_170m_as_sRGB=1
+ro.surface_flinger.enable_frame_rate_override=false
+ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
+ro.surface_flinger.has_HDR_display=true
+ro.surface_flinger.has_wide_color_display=true
+ro.surface_flinger.max_frame_buffer_acquired_buffers=3
+ro.surface_flinger.max_virtual_display_dimension=4096
+ro.surface_flinger.protected_contents=true
+ro.surface_flinger.set_idle_timer_ms=1100
+ro.surface_flinger.set_touch_timer_ms=200
+ro.surface_flinger.supports_background_blur=1
+ro.surface_flinger.use_color_management=true
+ro.surface_flinger.use_content_detection_for_refresh_rate=true
+ro.surface_flinger.wcg_composition_dataspace=143261696
+
+# Dalvik heap
+dalvik.vm.heapgrowthlimit=256m
+dalvik.vm.heapmaxfree=8m
+dalvik.vm.heapminfree=2m
+dalvik.vm.heapsize=512m
+dalvik.vm.heapstartsize=8m
+dalvik.vm.heaptargetutilization=0.75
+
+# Audio: stereo speakers
+persist.vendor.audio.voicecall.speaker.stereo=true
+ro.vendor.audio.spk.stereo=true

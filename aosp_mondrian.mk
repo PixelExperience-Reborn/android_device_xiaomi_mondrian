@@ -14,6 +14,8 @@ $(call inherit-product, device/xiaomi/mondrian/device.mk)
 # PE product layer (vendor/aosp, not vendor/lineage). The boot animation
 # resolution must be set before it is inherited: M11A panel is 1440x3200.
 TARGET_BOOT_ANIMATION_RES := 1440
+# Google apps (MindTheGapps, vendor/gapps), as every PE build ships them.
+WITH_GMS := true
 $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 
 PRODUCT_NAME := aosp_mondrian

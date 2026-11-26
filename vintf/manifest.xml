@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-License-Identifier: Apache-2.0
+
+    PixelExperience-Reborn Android 17: device HAL manifest of mondrian. The
+    stock OS3.0.8.0 camera provider (CamX/CHI) and the camera services the CHI
+    override registers (post-processing, always-on camera). See the platform
+    manifest of sm8450-common.
+-->
+<manifest version="1.0" type="device" target-level="7">
+    <hal format="hidl">
+        <name>android.hardware.camera.provider</name>
+        <transport>hwbinder</transport>
+        <fqname>@2.7::ICameraProvider/legacy/1</fqname>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.camera.aon</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.0::IAONService/aoncameraservice</fqname>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.camera.postproc</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.0::IPostProcService/camerapostprocservice</fqname>
+    </hal>
+</manifest>

@@ -44,5 +44,10 @@ TARGET_SCREEN_DENSITY := 560
 # under the display, panel, Dalvik heap), after those of sm8450-common.
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
+# VINTF: the stock camera provider and the camera services of the CHI
+# override, after the platform manifest of sm8450-common.
+DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/vintf/manifest.xml
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/framework_compatibility_matrix.xml
+
 # Proprietary files
 include vendor/xiaomi/mondrian/BoardConfigVendor.mk

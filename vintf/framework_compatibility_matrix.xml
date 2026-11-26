@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-License-Identifier: Apache-2.0
+
+    PixelExperience-Reborn Android 17: framework compatibility matrix extension
+    for the Qualcomm camera services of mondrian's vintf/manifest.xml.
+-->
+<compatibility-matrix version="1.0" type="framework">
+    <hal format="hidl">
+        <name>vendor.qti.hardware.camera.aon</name>
+        <version>1.0</version>
+        <interface>
+            <name>IAONService</name>
+            <instance>aoncameraservice</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.camera.postproc</name>
+        <version>1.0</version>
+        <interface>
+            <name>IPostProcService</name>
+            <instance>camerapostprocservice</instance>
+        </interface>
+    </hal>
+</compatibility-matrix>

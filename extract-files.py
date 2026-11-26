@@ -36,7 +36,6 @@ lib_fixups: lib_fixups_user_type = {
     (
         'android.frameworks.sensorservice@1.0',
         'libkeymaster_messages',
-        'libmemunreachable',
     ): lib_fixup_vendor_suffix,
 }
 

@@ -30,7 +30,11 @@ def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
 # users depend on the suffixed module.
 lib_fixups: lib_fixups_user_type = {
     **lib_fixups,
-    'libmemunreachable': lib_fixup_vendor_suffix,
+    (
+        'android.frameworks.sensorservice@1.0',
+        'libkeymaster_messages',
+        'libmemunreachable',
+    ): lib_fixup_vendor_suffix,
 }
 
 module = ExtractUtilsModule(

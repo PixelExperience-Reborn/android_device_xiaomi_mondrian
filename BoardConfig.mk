@@ -31,6 +31,16 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
 BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(KERNEL_PATH)/vendor_ramdisk/modules.load.recovery))
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(KERNEL_PATH)/vendor_ramdisk/modules.blocklist
+# Recovery also needs the audio/ADSP modules (battery status comes from the
+# ADSP), which the release ships for vendor_dlkm only: the stock recovery
+# insmods them in this order on early-init. They join the vendor_boot ramdisk
+# and are loaded after modules.load.recovery, which holds their dependencies
+# (pdr_interface, rproc_qcom_common); first stage init loads them in recovery
+# only, normal boot keeps loading them from vendor_dlkm.
+MONDRIAN_RECOVERY_DLKM := q6_pdr_dlkm.ko q6_notifier_dlkm.ko snd_event_dlkm.ko gpr_dlkm.ko \
+    spf_core_dlkm.ko adsp_loader_dlkm.ko
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += $(addprefix $(KERNEL_PATH)/vendor_dlkm/,$(MONDRIAN_RECOVERY_DLKM))
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD += $(MONDRIAN_RECOVERY_DLKM)
 BOARD_USES_VENDOR_DLKMIMAGE := true
 BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(KERNEL_PATH)/vendor_dlkm/modules.blocklist
 BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/vendor_dlkm/*.ko)

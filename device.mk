@@ -57,15 +57,3 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
-
-# Recovery: the audio/ADSP kernel modules init.recovery.qcom.rc loads before
-# it starts the ADSP (battery status), in the stock order of OS3.0.8.0.
-# Their other dependencies are in modules.load.recovery of vendor_boot.
-# (device/xiaomi/mondrian-kernel/Android.bp installs them.)
-PRODUCT_PACKAGES += \
-    mondrian_recovery_q6_pdr_dlkm \
-    mondrian_recovery_q6_notifier_dlkm \
-    mondrian_recovery_snd_event_dlkm \
-    mondrian_recovery_gpr_dlkm \
-    mondrian_recovery_spf_core_dlkm \
-    mondrian_recovery_adsp_loader_dlkm

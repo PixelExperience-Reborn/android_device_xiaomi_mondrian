@@ -16,6 +16,12 @@ PRODUCT_SOONG_NAMESPACES += \
 PRODUCT_COPY_FILES += \
     device/xiaomi/mondrian/rootdir/etc/ueventd.odm.rc:$(TARGET_COPY_OUT_ODM)/etc/ueventd.rc
 
+# Audio configuration of sku_cape (rootdir/etc/audio): the stock one without
+# the MiSound and Dolby effects and without the Qualcomm Bluetooth audio HAL.
+PRODUCT_COPY_FILES += \
+    device/xiaomi/mondrian/rootdir/etc/audio/sku_cape/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_cape/audio_effects.xml \
+    device/xiaomi/mondrian/rootdir/etc/audio/sku_cape/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_cape/audio_policy_configuration.xml
+
 # Kernel image from the prebuilt release (see BoardConfig.mk).
 PRODUCT_COPY_FILES += \
     device/xiaomi/mondrian-kernel/Image:kernel

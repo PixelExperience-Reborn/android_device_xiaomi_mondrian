@@ -37,6 +37,12 @@ BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/vendor_dlkm/*.ko)
 BOARD_VENDOR_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(KERNEL_PATH)/vendor_dlkm/modules.load))
 
+# Stock firmware of OS3.0.8.0 (China), flashed with the ROM: the partitions
+# of firmware-files.txt, extracted to vendor/xiaomi/mondrian/radio and added
+# as radio images (firmware/Android.mk) to the A/B payload.
+MONDRIAN_FIRMWARE_PARTITIONS := $(shell sed -n 's/^\([a-z0-9_-]*\)|.*/\1/p' $(DEVICE_PATH)/firmware-files.txt)
+AB_OTA_PARTITIONS += $(MONDRIAN_FIRMWARE_PARTITIONS)
+
 # Display: M11A, 1440x3200 WQHD+.
 TARGET_SCREEN_DENSITY := 560
 

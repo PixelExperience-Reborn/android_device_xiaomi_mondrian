@@ -54,6 +54,16 @@ class KernelTest(unittest.TestCase):
         self.assertRegex((ROOT / "device.mk").read_text(),
                          r"(?m)^PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true$")
 
+    def test_manifest_declares_kernel_fcm_7(self):
+        # Without it libvintf takes kernel FCM 6 from the GKI release
+        # (android12), which the Android 17 framework matrices no longer cover.
+        import xml.etree.ElementTree as ET
+        root = ET.parse(ROOT / "vintf/manifest.xml").getroot()
+        kernels = root.findall("kernel")
+        self.assertEqual([k.get("target-level") for k in kernels], ["7"])
+        if COMMON:
+            self.assertEqual(ET.parse(COMMON / "vintf/manifest.xml").getroot().findall("kernel"), [])
+
     @unittest.skipUnless(KERNEL, "needs the extracted stock kernel (MONDRIAN_KERNEL)")
     def test_extracted_kernel_is_the_stock_gki_past_the_minimum_lts(self):
         release = (KERNEL / "kernel_release").read_text().strip()

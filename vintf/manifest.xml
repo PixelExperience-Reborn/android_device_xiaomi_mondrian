@@ -8,6 +8,15 @@
     manifest of sm8450-common.
 -->
 <manifest version="1.0" type="device" target-level="7">
+    <!--
+        The stock GKI kernel 5.10.236-android12-9 (kernel-files.txt). Its
+        release names Android 12 (kernel FCM 6), for which the Android 17
+        framework keeps no kernel requirements; it meets those of kernel FCM 7
+        for 5.10: LTS 5.10.107 or later and every config of kernel/configs
+        t/android-5.10 (android-base.config and the conditional groups) of
+        android-17.0.0_r1, which the OTA VINTF check verifies.
+    -->
+    <kernel target-level="7"/>
     <hal format="hidl">
         <name>android.hardware.camera.provider</name>
         <transport>hwbinder</transport>

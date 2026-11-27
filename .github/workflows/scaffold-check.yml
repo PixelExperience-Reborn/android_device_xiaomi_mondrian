@@ -10,5 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # The cross-tree checks (VINTF servers, audio and init files) need the
+      # sm8450-common tree; the tests skip them with a reason when it is missing.
+      - name: Check out the sm8450-common tree of the same branch
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          repository: PixelExperience-Reborn/android_device_xiaomi_sm8450-common
+          ref: ${{ github.head_ref || github.ref_name }}
+          path: .ci/sm8450-common
+          persist-credentials: false
       - name: Check independent product wiring
         run: python3 -m unittest discover -s tests -v

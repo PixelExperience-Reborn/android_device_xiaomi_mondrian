@@ -6,8 +6,21 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMON = next(p for p in (ROOT.parent / "sm8450-common", ROOT.parent / "android_device_xiaomi_sm8450-common")
-              if p.is_dir())
+
+
+def sibling(*names):
+    """A sibling tree: next to this one (device/xiaomi/* in the source tree,
+    android_device_xiaomi_* side by side) or in .ci/ (checked out by CI)."""
+    for base in (ROOT.parent, ROOT / ".ci"):
+        for name in names:
+            if (base / name).is_dir():
+                return base / name
+    return None
+
+
+COMMON = sibling("sm8450-common", "android_device_xiaomi_sm8450-common")
+if COMMON is None:
+    raise unittest.SkipTest("needs the sm8450-common tree next to this one or in .ci/")
 _spec = importlib.util.spec_from_file_location("sm8450_vintf", COMMON / "tests/test_vintf.py")
 common = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(common)
@@ -29,6 +42,8 @@ class MondrianVintfTest(common.VintfTest):
     FCM = ROOT / "vintf/framework_compatibility_matrix.xml"
 
     def setUp(self):
+        # The servers are looked up in both lists: this tree is the device one.
+        common.DEVICE = ROOT
         super().setUp()
         common.SERVERS.update(SERVERS)
         _, common_instances = common.manifest_instances(common.VintfTest.MANIFEST)

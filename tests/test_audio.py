@@ -11,8 +11,21 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMON = next(p for p in (ROOT.parent / "sm8450-common", ROOT.parent / "android_device_xiaomi_sm8450-common")
-              if p.is_dir())
+
+
+def sibling(*names):
+    """A sibling tree: next to this one (device/xiaomi/* in the source tree,
+    android_device_xiaomi_* side by side) or in .ci/ (checked out by CI)."""
+    for base in (ROOT.parent, ROOT / ".ci"):
+        for name in names:
+            if (base / name).is_dir():
+                return base / name
+    return None
+
+
+COMMON = sibling("sm8450-common", "android_device_xiaomi_sm8450-common")
+if COMMON is None:
+    raise unittest.SkipTest("needs the sm8450-common tree next to this one or in .ci/")
 SKU = ROOT / "rootdir/etc/audio/sku_cape"
 NS = {"e": "http://schemas.android.com/audio/audio_effects_conf/v2_0"}
 # AOSP 17 vendor modules: installed name -> module name.

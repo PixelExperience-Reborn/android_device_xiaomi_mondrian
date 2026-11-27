@@ -905,9 +905,10 @@ vendor/firmware/aw882xx_acf.bin|ce0e16d22380565114f56e6a02e4f85959160baccc6c163d
 
 # === Fingerprint: Xiaomi fingerprint daemon (mfp-daemon) ===
 # No source exists. Kernel: goodix_fp. mfp-daemon links the odm library vendor.xiaomi.hardware.fx.tunnel@1.0.
+# The stock init.mfp-daemon.rc is not used: the daemon registers fingerprint HIDL 2.1, which the
+# UDFPS AIDL HAL wraps (with its own init script, without the stock world-writable /dev/goodix_fp).
 odm/lib64/vendor.xiaomi.hardware.fx.tunnel@1.0.so|fa43a135f96dc1393c231b1e6c3a62f6698861429292eeb5b1078822f5ac6187
 vendor/bin/hw/mfp-daemon|9f875a089bf126ba0bb246a5407f14ac360e4dfac8bd1d20c3ec9b84bf07b28b
-vendor/etc/init/init.mfp-daemon.rc|f2c0e36a22bb7990cfe561ace23f6887c939eeca41ea9668100e904bb54e2af1
 vendor/lib64/com.fingerprints.extension@3.0.so|454122d13d3a98c2ca91bacb73d5fa33b237703c8e344dd63e0b7ff85b8c12bc
 vendor/lib64/libmisight.so|48b0423938d717a892cb443544a58ed104ec1a48dd58f864575730456c6a60f7
 vendor/lib64/vendor.xiaomi.hardware.fingerprintextension@1.0.so|f89ee6a5d8c1ed83af68c99617c5e3db3ca4377d4ad5dfaaf80d2de40c82991e

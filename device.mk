@@ -40,10 +40,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     vendor/xiaomi/mondrian/kernel/Image:kernel
 
-# The stock kernel is 5.10.236, past the LTS 5.10.107 the Android 17
-# framework matrix asks for kernel FCM 7, and it carries its config (IKCONFIG):
-# OTA packaging checks the kernel version and configs with the HALs.
-PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
+# VINTF and the kernel: with device target-level 7, Android 17 takes the
+# kernel FCM level from the GKI release (it refuses an explicit one), and
+# 5.10.236-android12-9 gives level 6, for which the Android 17 framework
+# matrices keep no kernel requirements. The stock kernel meets those of
+# level 7 for 5.10 (LTS 5.10.107 or later, every config of kernel/configs
+# t/android-5.10; tests/test_kernel_vintf.py checks it against the tree), so
+# OTA packaging checks the HALs and not the kernel.
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
 # mondrian launched with Android 13 (stock ro.product.first_api_level=33).
 PRODUCT_SHIPPING_API_LEVEL := 33

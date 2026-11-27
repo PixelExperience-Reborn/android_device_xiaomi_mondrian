@@ -16,9 +16,15 @@ OS3.0.8.0 работает на **Google GKI 5.10.236-android12-9** (`ab14313284
 раскладывает их в `vendor/xiaomi/mondrian/kernel` (`KERNEL_PATH`): `Image`,
 `dtbs/stock.dtb`, `dtbo.img`, `vendor_ramdisk/` (354 модуля, стоковые
 `modules.load`/`.recovery`/`.blocklist`), `vendor_dlkm/` (309 модулей).
-В git ничего из этого не попадает. Ядро 5.10.236 выше LTS 5.10.107, которую
-матрица A17 требует для FCM 7, поэтому проверка VINTF ядра при упаковке OTA
-включена.
+В git ничего из этого не попадает.
+
+VINTF: при target-level 7 Android 17 берёт уровень ядра из строки GKI и не
+даёт задать его в манифесте; `android12` даёт уровень 6, а требований для
+ядер уровня 6 во фреймворке Android 17 уже нет. По существу стоковое ядро
+отвечает требованиям уровня 7 для 5.10: LTS 5.10.107+ и все параметры
+`kernel/configs` `t/android-5.10` AOSP 17 (базовые и условные, 0 расхождений).
+Поэтому при упаковке OTA VINTF проверяет HAL, а ядро проверяет
+`tests/test_kernel_vintf.py` (`PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false`).
 
 Ядро нашего CI (`device/xiaomi/mondrian-kernel`, раздел ниже) вернётся, когда
 его выпуск загрузится на устройстве (`fastboot boot` с образами этого

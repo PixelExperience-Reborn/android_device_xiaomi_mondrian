@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <!-- Keep status bar icons clear of the 120px corners (1440x3200). -->
+    <dimen name="rounded_corner_content_padding">49px</dimen>
+</resources>

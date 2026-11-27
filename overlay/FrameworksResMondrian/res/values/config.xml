@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <!-- Brightness range of the stock overlay (AospFrameworkResOverlay). -->
+    <item name="config_screenBrightnessSettingMinimumFloat" format="float" type="dimen">0.000916</item>
+    <item name="config_screenBrightnessSettingMaximumFloat" format="float" type="dimen">1.000000</item>
+    <item name="config_screenBrightnessSettingDefaultFloat" format="float" type="dimen">0.074960</item>
+    <item name="config_screenBrightnessDimFloat" format="float" type="dimen">0.000916</item>
+    <!-- Automatic brightness: the stock lux levels and backlight values. The stock backlight
+         values are panel levels 1..4095 (M11A panel: qcom,mdss-brightness-max-level 0xfff);
+         Android 17 expects 1..255 here, so they are scaled: 1 + round(level / 4095 * 254).
+         The stock nits curve is not used: it needs a nits-to-backlight map
+         (config_screenBrightnessNits/Backlight) that the stock overlays do not have. -->
+    <integer-array name="config_autoBrightnessLevels">
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>55</item>
+        <item>60</item>
+        <item>65</item>
+        <item>70</item>
+        <item>75</item>
+        <item>80</item>
+        <item>85</item>
+        <item>90</item>
+        <item>95</item>
+        <item>100</item>
+        <item>120</item>
+        <item>140</item>
+        <item>160</item>
+        <item>180</item>
+        <item>200</item>
+        <item>220</item>
+        <item>240</item>
+        <item>260</item>
+        <item>280</item>
+        <item>300</item>
+        <item>320</item>
+        <item>340</item>
+        <item>360</item>
+        <item>380</item>
+        <item>400</item>
+        <item>420</item>
+        <item>440</item>
+        <item>460</item>
+        <item>480</item>
+        <item>500</item>
+        <item>700</item>
+        <item>900</item>
+        <item>1100</item>
+        <item>1300</item>
+        <item>1500</item>
+        <item>1700</item>
+        <item>1900</item>
+        <item>2000</item>
+        <item>2500</item>
+        <item>3000</item>
+        <item>3500</item>
+        <item>4000</item>
+        <item>4500</item>
+        <item>5000</item>
+        <item>5500</item>
+        <item>6000</item>
+        <item>6500</item>
+        <item>7000</item>
+        <item>7500</item>
+        <item>8000</item>
+        <item>8500</item>
+        <item>9000</item>
+        <item>9500</item>
+        <item>10000</item>
+        <item>10500</item>
+        <item>11000</item>
+        <item>11500</item>
+        <item>12000</item>
+        <item>12500</item>
+        <item>13000</item>
+        <item>13500</item>
+        <item>14000</item>
+        <item>14500</item>
+        <item>15000</item>
+        <item>16000</item>
+        <item>17000</item>
+        <item>18000</item>
+        <item>19000</item>
+        <item>20000</item>
+        <item>21000</item>
+        <item>22000</item>
+        <item>23000</item>
+        <item>24000</item>
+        <item>25000</item>
+        <item>26000</item>
+        <item>27000</item>
+        <item>28000</item>
+        <item>29000</item>
+        <item>30000</item>
+        <item>35000</item>
+        <item>40000</item>
+        <item>45000</item>
+        <item>50000</item>
+        <item>55000</item>
+        <item>60000</item>
+        <item>65000</item>
+        <item>70000</item>
+        <item>75000</item>
+        <item>80000</item>
+        <item>85000</item>
+        <item>90000</item>
+        <item>95000</item>
+        <item>100000</item>
+    </integer-array>
+    <integer-array name="config_autoBrightnessLcdBacklightValues">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>11</item>
+        <item>13</item>
+        <item>16</item>
+        <item>18</item>
+        <item>24</item>
+        <item>31</item>
+        <item>40</item>
+        <item>42</item>
+        <item>43</item>
+        <item>43</item>
+        <item>43</item>
+        <item>43</item>
+        <item>43</item>
+        <item>43</item>
+        <item>44</item>
+        <item>44</item>
+        <item>44</item>
+        <item>44</item>
+        <item>44</item>
+        <item>44</item>
+        <item>45</item>
+        <item>45</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>52</item>
+        <item>54</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>71</item>
+        <item>81</item>
+        <item>92</item>
+        <item>105</item>
+        <item>116</item>
+        <item>132</item>
+        <item>143</item>
+        <item>151</item>
+        <item>188</item>
+        <item>204</item>
+        <item>213</item>
+        <item>221</item>
+        <item>230</item>
+        <item>238</item>
+        <item>247</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+    </integer-array>
+    <!-- Ambient light hysteresis of the stock overlay (per mille). -->
+    <integer-array name="config_ambientThresholdLevels">
+        <item>2</item>
+        <item>10</item>
+        <item>30</item>
+        <item>100</item>
+        <item>800</item>
+        <item>2000</item>
+        <item>4000</item>
+    </integer-array>
+    <integer-array name="config_ambientBrighteningThresholds">
+        <item>2</item>
+        <item>6</item>
+        <item>10</item>
+        <item>30</item>
+        <item>100</item>
+        <item>400</item>
+        <item>600</item>
+        <item>1000</item>
+    </integer-array>
+    <integer-array name="config_ambientDarkeningThresholds">
+        <item>800</item>
+        <item>800</item>
+        <item>500</item>
+        <item>500</item>
+        <item>500</item>
+        <item>500</item>
+        <item>500</item>
+        <item>500</item>
+    </integer-array>
+    <integer name="config_autoBrightnessBrighteningLightDebounce">1000</integer>
+    <integer name="config_autoBrightnessDarkeningLightDebounce">1000</integer>
+    <!-- 120 Hz panel: no fixed default rate, peak 120 Hz (the Smooth display setting). -->
+    <integer name="config_defaultRefreshRate">0</integer>
+    <integer name="config_defaultPeakRefreshRate">120</integer>
+    <!-- OLED panel: shift the always-on display. -->
+    <bool name="config_enableBurnInProtection">true</bool>
+    <!-- Two physical SIM slots. -->
+    <integer name="config_num_physical_slots">2</integer>
+    <!-- Punch-hole camera at the top center, in 1440x3200 panel pixels. The stock overlays give
+         MIUI's 1080x2400 values; this is the device-tested native geometry of the
+         LineageOS mondrian tree (lineage-24.0). -->
+    <string name="config_mainBuiltInDisplayCutout">M 0,0 H -34 V 120 H 34 V 0 H 0 Z</string>
+</resources>

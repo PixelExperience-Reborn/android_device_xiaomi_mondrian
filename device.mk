@@ -22,6 +22,20 @@ PRODUCT_COPY_FILES += \
     device/xiaomi/mondrian/rootdir/etc/audio/sku_cape/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_cape/audio_effects.xml \
     device/xiaomi/mondrian/rootdir/etc/audio/sku_cape/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_cape/audio_policy_configuration.xml
 
+# Runtime resource overlays of mondrian (overlay/, odm): brightness and
+# automatic brightness, 120 Hz, always-on display, the camera cutout and
+# rounded corners of the 1440x3200 panel, the power profile, and the names of
+# both models chosen by ro.boot.hwc (docs/OVERLAYS.md in sm8450-common).
+PRODUCT_PACKAGES += \
+    FrameworksResMondrian \
+    FrameworksResMondrianGlobal \
+    SettingsProviderResMondrian \
+    SettingsProviderResMondrianCN \
+    SettingsResMondrian \
+    SystemUIResMondrian \
+    WifiResMondrian \
+    WifiResMondrianCN
+
 # Kernel image from the prebuilt release (see BoardConfig.mk).
 PRODUCT_COPY_FILES += \
     device/xiaomi/mondrian-kernel/Image:kernel

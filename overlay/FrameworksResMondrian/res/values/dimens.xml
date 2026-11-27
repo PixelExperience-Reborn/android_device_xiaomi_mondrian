@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <!-- Status bar of the 1440x3200 panel: 138px (stock) in portrait, below the camera hole;
+         the default and landscape heights stay small (the hole is at the side then). -->
+    <dimen name="status_bar_height_portrait">138px</dimen>
+    <dimen name="status_bar_height_default">28dp</dimen>
+    <dimen name="status_bar_height_landscape">28dp</dimen>
+    <!-- Rounded display corners (stock DevicesAndroidOverlay). -->
+    <dimen name="rounded_corner_radius">120px</dimen>
+    <dimen name="rounded_corner_radius_top">120px</dimen>
+    <dimen name="rounded_corner_radius_bottom">120px</dimen>
+</resources>

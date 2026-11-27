@@ -9,6 +9,7 @@ other PRODUCT_COPY_FILES conversion types in Android.bp files, and an ELF file
 (a .ko) in PRODUCT_COPY_FILES under a lib directory, so neither may install
 them.
 """
+import os
 import re
 import struct
 import unittest
@@ -34,7 +35,11 @@ def sibling(*names):
 
 
 COMMON = sibling("sm8450-common", "android_device_xiaomi_sm8450-common")
-KERNEL = sibling("mondrian-kernel", "android_device_xiaomi_mondrian-kernel")
+# The stock kernel layout tools/extract_proprietary.py writes (KERNEL_PATH).
+KERNEL = next((p for p in (Path(os.environ.get("MONDRIAN_KERNEL", "/nonexistent")),
+                           ROOT.parent / "proprietary_vendor_xiaomi_mondrian/kernel",
+                           ROOT.parents[2] / "vendor/xiaomi/mondrian/kernel")
+               if (p / "vendor_ramdisk/modules.load").is_file()), None)
 
 
 def modinfo(path):
@@ -70,7 +75,7 @@ class RecoveryModulesTest(unittest.TestCase):
 
     def test_dependencies_come_first(self):
         if KERNEL is None:
-            self.skipTest("needs the mondrian-kernel release")
+            self.skipTest("needs the extracted stock kernel (MONDRIAN_KERNEL)")
         norm = lambda name: name.removesuffix(".ko").replace("-", "_")
         loaded = {norm(l) for l in (KERNEL / "vendor_ramdisk/modules.load.recovery").read_text().split()}
         for module in ORDER:
@@ -82,7 +87,7 @@ class RecoveryModulesTest(unittest.TestCase):
                 loaded.add(norm(module))
 
     def test_no_forbidden_module_type(self):
-        trees = [ROOT] + [t for t in (COMMON, KERNEL) if t is not None]
+        trees = [ROOT] + [t for t in (COMMON,) if t is not None]
         for tree in trees:
             for bp in tree.rglob("Android.bp"):
                 if ".git" in bp.parts or ".ci" in bp.parts:

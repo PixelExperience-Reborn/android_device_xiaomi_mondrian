@@ -3,24 +3,27 @@
 # PixelExperience-Reborn Android 17: Xiaomi mondrian (POCO F5 Pro / Redmi K60).
 
 DEVICE_PATH := device/xiaomi/mondrian
-KERNEL_PATH := device/xiaomi/mondrian-kernel
+KERNEL_PATH := vendor/xiaomi/mondrian/kernel
 
 include device/xiaomi/sm8450-common/BoardConfigCommon.mk
 
 TARGET_OTA_ASSERT_DEVICE := mondrian
 
-# Kernel: the prebuilt release of our CI (device/xiaomi/mondrian-kernel,
-# built from android_kernel_xiaomi_sm8450, -modules and -devicetrees; the
-# exact commits are in its provenance.json), installed the way AOSP installs
-# the Pixel kernels. vendor/aosp's kernel build is not used.
+# Kernel: the stock kernel of OS3.0.8.0, the Google GKI 5.10.236-android12-9
+# the stock vendor and firmware run on, with its DTBs, DTBO and vendor
+# modules. sm8450-common's tools/extract_proprietary.py takes them from the
+# boot, vendor_boot, dtbo and vendor_dlkm images of the official OTA (pinned
+# by SHA-256 in kernel-files.txt) into vendor/xiaomi/mondrian/kernel
+# (tools/stock_kernel.py); they are not committed. Installed the way AOSP
+# installs the Pixel kernels; vendor/aosp's kernel build is not used.
 ifeq ($(wildcard $(KERNEL_PATH)/Image),)
-$(error mondrian: no prebuilt kernel in $(KERNEL_PATH); commit a release of the kernel CI there)
+$(error mondrian: no kernel in $(KERNEL_PATH); run device/xiaomi/sm8450-common/tools/extract_proprietary.py)
 endif
 TARGET_NO_KERNEL_OVERRIDE := true
 
-# vendor_boot: the Cape base DTBs (msm-id 0x212/0x213/0x21c), as stock.
+# vendor_boot: the DTBs of the stock vendor_boot (all Cape variants).
 BOARD_PREBUILT_DTBIMAGE_DIR := $(KERNEL_PATH)/dtbs
-# dtbo: one mondrian overlay (msm-id 530/531/540, board-id 0x10008 0).
+# dtbo: the DTBO table of the stock dtbo image.
 BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_PATH)/dtbo.img
 
 # Modules and load lists in the places and order of stock: first stage and

@@ -23,7 +23,7 @@ LineageOS (`android_device_xiaomi_sm8450-common`, `android_device_xiaomi_mondria
 |---|---|
 | sm8450-common | `BoardConfigCommon.mk` (архитектура, EROFS), `common.mk` (A/B, dynamic partitions, fstab), `rootdir/etc/fstab.qcom` (из стока), `proprietary-files.txt` (416 закрытых файлов с sha256 из OTA) |
 | mondrian | `BoardConfig.mk`, `device.mk`, `aosp_mondrian.mk`, `proprietary-files.txt` (919 файлов: камера, DSP, сенсоры, аудио-калибровка) |
-| mondrian-kernel | проверка выпуска; первого выпуска ядра ещё нет |
+| mondrian-kernel | выпуск CI есть, на устройстве не загрузился; сейчас ядро стоковое из OTA (`docs/KERNEL_BOOT_CHAIN.md`) |
 
 ## Чего не хватает и откуда берём
 

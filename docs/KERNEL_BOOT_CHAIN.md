@@ -1,9 +1,35 @@
-# mondrian: загрузочная цепочка и готовое ядро из нашего CI
+# mondrian: загрузочная цепочка и ядро
 
-Решение владельца проекта (25.11.2026): ядро, модули и DT подаются в сборку
-Android **готовыми** из нашего CI (как `device/google/*-kernel` в AOSP), а не
-собираются внутри сборки Android. Источник правды о раскладке — стоковая
-прошивка OS3.0.8.0.VMNCNXM; LineageOS — только ориентир.
+## Сейчас (27.11.2026): стоковое ядро OS3.0.8.0
+
+Первая установка на устройство показала: с ядром нашего CI (5.10.81 из
+исходников Xiaomi 2022 года, ни разу не загружавшимся) слот не стартует —
+через секунду после логотипа перезагрузка в fastboot, recovery этого слота
+висит. Тот же наш recovery со стоковым ядром работал. Стоковая прошивка
+OS3.0.8.0 работает на **Google GKI 5.10.236-android12-9** (`ab14313284`),
+и стоковые vendor и firmware рассчитаны на него.
+
+Поэтому ядро берётся из официального OTA, как прошивка:
+`kernel-files.txt` закрепляет образы `boot`, `vendor_boot`, `dtbo`,
+`vendor_dlkm` по SHA-256 (те же хэши — в `ota-source.json` sm8450-common,
+тип `kernel`), `tools/extract_proprietary.py` с `tools/stock_kernel.py`
+раскладывает их в `vendor/xiaomi/mondrian/kernel` (`KERNEL_PATH`): `Image`,
+`dtbs/stock.dtb`, `dtbo.img`, `vendor_ramdisk/` (354 модуля, стоковые
+`modules.load`/`.recovery`/`.blocklist`), `vendor_dlkm/` (309 модулей).
+В git ничего из этого не попадает. Ядро 5.10.236 выше LTS 5.10.107, которую
+матрица A17 требует для FCM 7, поэтому проверка VINTF ядра при упаковке OTA
+включена.
+
+Ядро нашего CI (`device/xiaomi/mondrian-kernel`, раздел ниже) вернётся, когда
+его выпуск загрузится на устройстве (`fastboot boot` с образами этого
+выпуска) и будет сверен со стоковым по модулям и DT.
+
+## Ядро нашего CI (решение от 25.11.2026, пока не используется)
+
+Ядро, модули и DT подаются в сборку Android **готовыми** из нашего CI (как
+`device/google/*-kernel` в AOSP), а не собираются внутри сборки Android.
+Источник правды о раскладке — стоковая прошивка OS3.0.8.0.VMNCNXM;
+LineageOS — только ориентир.
 
 ## Как устроен сток OS3.0.8.0
 
@@ -45,7 +71,9 @@ Android **готовыми** из нашего CI (как `device/google/*-kerne
 
 ## Подключение в device-дереве
 
-- Отдельный репозиторий готового ядра `device/xiaomi/mondrian-kernel`.
+- Сейчас `KERNEL_PATH := vendor/xiaomi/mondrian/kernel` (стоковое ядро, см.
+  выше); раскладка та же, что у выпуска CI.
+- Отдельный репозиторий готового ядра CI `device/xiaomi/mondrian-kernel`.
 - Ядро: `PRODUCT_COPY_FILES += <prebuilt>/Image:kernel`,
   `TARGET_NO_KERNEL_OVERRIDE := true` для `kernel.mk` из vendor/aosp.
 - `BOARD_VENDOR_RAMDISK_KERNEL_MODULES(_LOAD)`, `BOARD_VENDOR_KERNEL_MODULES(_LOAD)`,

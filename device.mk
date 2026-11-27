@@ -36,16 +36,14 @@ PRODUCT_PACKAGES += \
     WifiResMondrian \
     WifiResMondrianCN
 
-# Kernel image from the prebuilt release (see BoardConfig.mk).
+# Kernel image: the stock GKI kernel taken from the OTA (see BoardConfig.mk).
 PRODUCT_COPY_FILES += \
-    device/xiaomi/mondrian-kernel/Image:kernel
+    vendor/xiaomi/mondrian/kernel/Image:kernel
 
-# The kernel stays 5.10.81 (kernel_release of the mondrian-kernel release)
-# for now; the Android 17 framework matrix asks kernel FCM 7 for LTS
-# 5.10.107 or later. OTA packaging then checks the HALs against the
-# framework but not the kernel version and configs. Set back to true once
-# the kernel is 5.10.107+ (tests/test_kernel_vintf.py checks the pair).
-PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+# The stock kernel is 5.10.236, past the LTS 5.10.107 the Android 17
+# framework matrix asks for kernel FCM 7, and it carries its config (IKCONFIG):
+# OTA packaging checks the kernel version and configs with the HALs.
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
 
 # mondrian launched with Android 13 (stock ro.product.first_api_level=33).
 PRODUCT_SHIPPING_API_LEVEL := 33

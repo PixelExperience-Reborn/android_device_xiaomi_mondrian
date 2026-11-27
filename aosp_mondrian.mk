@@ -3,7 +3,6 @@
 # The name follows the PixelExperience convention aosp_<device>: the PE
 # build tooling (breakfast, CUSTOM_BUILD, org.pixelexperience.device)
 # derives the device codename from it.
-# This is a product skeleton, not a boot-ready device configuration.
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)

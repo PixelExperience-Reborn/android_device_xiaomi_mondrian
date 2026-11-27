@@ -8,3 +8,17 @@ soong_namespace {
         "device/xiaomi/sm8450-common",
     ],
 }
+
+// HIDL interfaces of the stock camera provider that ship only as prebuilts.
+// The host init verifier checks the interface lines of its .rc file against
+// the known HIDL interfaces.
+prebuilt_hidl_interfaces {
+    name: "hidl_interfaces_mondrian_camera",
+    interfaces: [
+        "vendor.qti.hardware.camera.aon@1.0::IAONService",
+        "vendor.qti.hardware.camera.postproc@1.0::IPostProcService",
+        "vendor.xiaomi.hardware.bgservice@1.0::IBGService",
+        "vendor.xiaomi.hardware.campostproc@1.0::IMiPostProcService",
+        "vendor.xiaomi.hardware.quickcamera@1.0::IQuickCameraService",
+    ],
+}

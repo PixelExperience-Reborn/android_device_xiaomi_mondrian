@@ -19,6 +19,8 @@ from extract_utils.main import (
 
 namespace_imports = [
     'device/xiaomi/mondrian',
+    # libprocessgroup_shim of the camera blobs (tools/blob_fixups.py).
+    'device/xiaomi/sm8450-common',
     'vendor/xiaomi/sm8450-common',
 ]
 

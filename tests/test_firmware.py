@@ -25,6 +25,12 @@ COMMON = sibling("sm8450-common", "android_device_xiaomi_sm8450-common")
 OWN_IMAGES = {"boot", "vendor_boot", "init_boot", "dtbo", "recovery", "vbmeta", "vbmeta_system",
               "system", "system_ext", "product", "vendor", "odm", "vendor_dlkm", "mi_ext", "super"}
 
+# Partitions with the state of the device: the bootloader lock (devinfo), FRP,
+# calibration and modem NV data, keys. A ROM must never write them.
+DEVICE_STATE = {"devinfo", "frp", "persist", "misc", "modemst1", "modemst2", "fsg", "fsc", "ssd",
+                "keystore", "secdata", "storsec", "dip", "spunvm", "limits", "logdump", "splash",
+                "cust", "rawdump", "ddr", "apdp", "qmcs", "toolsfv", "uefivarstore", "multiimgoem"}
+
 
 def firmware():
     out = []
@@ -49,6 +55,21 @@ class FirmwareTest(unittest.TestCase):
 
     def test_own_images_and_logical_partitions_are_not_stock(self):
         self.assertFalse(OWN_IMAGES & {n for n, _ in firmware()})
+
+    def test_device_state_is_never_written(self):
+        self.assertFalse(DEVICE_STATE & {n for n, _ in firmware()})
+        board = (ROOT / "BoardConfig.mk").read_text()
+        for name in DEVICE_STATE:
+            self.assertNotRegex(board, rf"AB_OTA_PARTITIONS.*\b{name}\b")
+
+    def test_nothing_locks_the_bootloader(self):
+        # A custom ROM is never relocked: no lock command in this tree.
+        pattern = re.compile(r"(?i)fastboot\s+(flashing|oem)\s+lock|flashing_lock|flash_all_lock")
+        for path in ROOT.rglob("*"):
+            if ".git" in path.parts or ".ci" in path.parts or not path.is_file():
+                continue
+            if path.suffix in (".mk", ".sh", ".rc", ".txt", ".py", ".bp", ".xml", ".json") and path.name != "test_firmware.py":
+                self.assertIsNone(pattern.search(path.read_text(errors="ignore")), str(path))
 
     def test_pinned_with_the_ota(self):
         if COMMON is None:

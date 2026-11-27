@@ -50,6 +50,11 @@ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 # mondrian launched with Android 13 (stock ro.product.first_api_level=33).
 PRODUCT_SHIPPING_API_LEVEL := 33
 
+# Camera app: Aperture (packages/apps/Aperture, LineageOS lineage-24.0 for
+# Android 17) instead of AOSP Camera2, which it overrides. vendor/aosp adds
+# it to the product (config/common.mk) when this is true.
+PE_A17_PORT_APERTURE := true
+
 # Hardware features of mondrian: the cameras and the sensors of the stock
 # OS3.0.8.0 vendor (sku_cape), Android 17 definitions of frameworks/native.
 PRODUCT_COPY_FILES += \

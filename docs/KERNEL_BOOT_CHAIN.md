@@ -87,7 +87,7 @@ sideload): `dd if=/dev/block/sda15 of=/usb_otg/sda15.img`, затем `sync` и
   раннем этапе, сброс от TZ. Под подозрением первый этап и начало второго,
   самая большая нагрузка там — чтение erofs, а big pcluster в этом ядре
   помечен как экспериментальный; поэтому формат erofs возвращён к стоковому
-  (sm8450-common `BOARD_EROFS_USE_LEGACY_COMPRESSION`). Следующий дамп с
+  (sm8450-common: `feature_incompat` 0x1, 4 КиБ pcluster, как у стоковых образов). Следующий дамп с
   журналом первого этапа покажет причину.
 - `/metadata/vold/metadata_encryption/key` создан, `/data` с metadata
   encryption, но FBE не настроено и раздел почти пустой (лог OrangeFox

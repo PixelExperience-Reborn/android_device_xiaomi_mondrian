@@ -46,9 +46,23 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += $(addprefix $(KERNEL_PATH)/vendor_dlkm/,$
 BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD += $(MONDRIAN_RECOVERY_DLKM)
 BOARD_USES_VENDOR_DLKMIMAGE := true
 BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(KERNEL_PATH)/vendor_dlkm/modules.blocklist
-BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/vendor_dlkm/*.ko)
-BOARD_VENDOR_KERNEL_MODULES_LOAD := \
-    $(strip $(shell cat $(KERNEL_PATH)/vendor_dlkm/modules.load))
+# Modules of the stock vendor_dlkm that serve only the HyperOS/MIUI userspace:
+# app freezing (millet, with its binder hooks binder_gki/binder_prio/binderinfo),
+# game turbo (migt), MIUI network acceleration (sla, minet, miwill,
+# miicmpfilter), Xiaomi tuning hooks (perf_helper, extend_reclaim,
+# mi_freqwdg), the camera log service and two test modules. Without the MIUI
+# userspace they only hook binder, the scheduler and memory reclaim.
+# LineageOS for mondrian (Android 17) does not load them; no other module
+# depends on them (tests/test_kernel_modules.py). Not installed.
+MONDRIAN_MIUI_DLKM := \
+    binder_gki.ko binder_prio.ko binderinfo.ko cameralog.ko extend_reclaim.ko \
+    icc-test.ko mi_freqwdg.ko migt.ko miicmpfilter.ko millet_binder.ko \
+    millet_core.ko millet_hs.ko millet_oem_cgroup.ko millet_pkg.ko millet_sig.ko \
+    minet.ko miwill.ko miwill_mode_redudancy.ko mmrm_test_module.ko perf_helper.ko sla.ko
+BOARD_VENDOR_KERNEL_MODULES := $(filter-out $(addprefix $(KERNEL_PATH)/vendor_dlkm/,$(MONDRIAN_MIUI_DLKM)), \
+    $(wildcard $(KERNEL_PATH)/vendor_dlkm/*.ko))
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(filter-out $(MONDRIAN_MIUI_DLKM), \
+    $(strip $(shell cat $(KERNEL_PATH)/vendor_dlkm/modules.load)))
 
 # Stock firmware of OS3.0.8.0 (China), flashed with the ROM: the partitions
 # of firmware-files.txt, extracted to vendor/xiaomi/mondrian/radio and added

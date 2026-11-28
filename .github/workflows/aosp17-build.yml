@@ -11,10 +11,10 @@ on:
   workflow_dispatch:
     inputs:
       stage:
-        description: 'graph = lunch + m nothing; vendor = m vendorimage; recovery = m recoveryimage; full = m; bacon = PixelExperience package'
+        description: 'graph = lunch + m nothing; vendor = m vendorimage; recovery = m recoveryimage; full = m; bacon = PixelExperience package; verify = check the images of the last build (no sync, no build)'
         type: choice
         default: graph
-        options: [graph, vendor, recovery, full, bacon]
+        options: [graph, vendor, recovery, full, bacon, verify]
       release:
         description: 'TARGET_RELEASE (cp2a = stable release of android-17.0.0_r1)'
         default: cp2a

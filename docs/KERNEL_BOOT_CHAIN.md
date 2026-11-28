@@ -30,6 +30,73 @@ VINTF: при target-level 7 Android 17 берёт уровень ядра из 
 его выпуск загрузится на устройстве (`fastboot boot` с образами этого
 выпуска) и будет сверен со стоковым по модулям и DT.
 
+## Журнал загрузки в sda15 (mtdoops Xiaomi)
+
+Xiaomi хранит журнал ядра последних сессий в разделе `sda15`: `block2mtd`
+делает из него MTD, `mtdoops` при панике и при каждой перезагрузке пишет
+запись `## Index: N` / `## REASON: ...` с секциями `LAST KMSG` (кольцевой
+буфер ядра) и `LAST LOGCAT` (pmsg, область `mtdoops_pmsg@0xa7000000` в DT).
+Параметры дописывает загрузчик в cmdline:
+`block2mtd.block2mtd=/dev/block/sda15,2097152` и
+`mtdoops.mtddev=0 record_size=2097152 dump_oops=0` (только паники и
+перезагрузки, без oops).
+
+Параметры из cmdline применяет к модулям только init первого этапа
+(libmodprobe). `vendor_modprobe.sh` второго этапа грузит модули toybox
+`modprobe`, а он `/proc/cmdline` не читает: `block2mtd` поднимается без
+устройства, `mtdoops` не к чему подключиться. В стоке модули стоят только в
+`modules.load.recovery`, поэтому записи есть лишь для сессий recovery. В
+дампе тестера от 28.11.2026 все 7 записей (Index 3664–3670) — сессии
+OrangeFox и нашего recovery, обычных загрузок там нет и быть не могло.
+
+На userdebug/eng `BoardConfig.mk` (`MONDRIAN_MTDOOPS_MODULES`) добавляет
+`pm8941-pwrkey mtd ofpart chipreg block2mtd mtd_blkdevs mtdblock mtdoops` в
+конец обычного `modules.load` первого этапа (после UFS, порядок — как в
+сессиях recovery). Тогда паника или перезагрузка обычной загрузки тоже
+оставляет запись. Аппаратный сброс watchdog/TZ записи не оставит: ядро в этот
+момент уже не работает. Её отсутствие после сбоя само по себе указывает на
+такой сброс.
+
+Снять дамп из OrangeFox (Терминал или `adb shell` в обычном режиме ADB, не
+sideload): `dd if=/dev/block/sda15 of=/usb_otg/sda15.img`, затем `sync` и
+`umount /usb_otg`, либо `adb pull /dev/block/sda15 sda15.img` с ПК.
+
+Причину предыдущего сброса загрузчик передаёт ядру в cmdline как
+`bootinfo.pureason`/`bootinfo.pdreason` (печатаются в начале каждой записи и в
+`dmesg`). Расшифровка по таблицам модуля `bootinfo.ko`:
+
+| поле | биты | значения |
+|---|---|---|
+| `pureason`, биты 0–9 | событие включения | 0 hw_reset, 1 smpl, 2 rtc, 3 dc_chg, 4 usb_chg, 5 pon1, 6 cable, 7 keypad, 9 long_power_key |
+| `pureason`, биты 16–23 | причина сброса | 16 wdog, 17 kpanic, 18 reboot, 19 other, 20 dm_verity_enforcing, 21 dm_verity_logging, 22 dm_verity_keysclear, 23 fastboot_reboot |
+| `pdreason`, биты 0–7 | причина выключения (PMIC) | 0 soft, 1 ps_hold, 2 pmic_wd, 3 gp2, 4 gp1, 5 kpd_and_resin, 6 resin, 7 long_power_key |
+
+Что видно в дампе и логах тестера 28.11.2026:
+
+- `0x40001`/`0x2` — обычная перезагрузка (`reboot,userrequested,recovery` из
+  нашего recovery в recovery).
+- `0x80001`/`0x80` (лог `dmesg1`, сборка до 0240) — выключение долгим
+  нажатием питания: телефон висел на логотипе, тестер сбросил его кнопкой.
+- `0x80001`/`0x2` перед записью 3666 (сборки 0240/0408) — обычная загрузка
+  сбросилась сама через PS_HOLD с причиной `other`. Это не `reboot` (init
+  с известной целью), не `fastboot_reboot` и не dm-verity. Совпадает с
+  перезагрузкой с нестандартной целью от init (`reboot_on_failure`, например
+  `reboot,vold-failed` у vold) или со сбросом без cookie (паника, TZ).
+  Следующий дамп с журналом первого этапа это различит.
+- `/metadata/vold/metadata_encryption/key` создан, `/data` с metadata
+  encryption, но FBE не настроено и раздел почти пустой (лог OrangeFox
+  `recovery1`): ранняя сборка доходила до vold (`late-fs`, `mount_all
+  --late`) и останавливалась до или во время `init_user0`.
+- Раздел `modem` (`/vendor/firmware_mnt`: прошивки ADSP, CDSP, модема, IPA,
+  доверенные приложения TEE) не монтировался ни в recovery, ни в обычной
+  загрузке: fstab монтирует его с `context=u:object_r:firmware_file:s0`, а
+  нашей vendor-политике этого типа не было (как и `bt_firmware_file`,
+  `vendor_qmcs_file`). Ядро отвечает `security_context_str_to_sid(...) failed
+  ... errno=-22`, и mount падает с EINVAL даже в permissive. Без ADSP нет
+  pmic_glink (батарея, зарядка), UCSI (роль USB-C, поэтому в нашем recovery не
+  было adb) и звука. Исправлено в sm8450-common: генератор политики объявляет
+  типы всех `context=` из fstab по стоку (`tests/test_sepolicy.py`).
+
 ## Ядро нашего CI (решение от 25.11.2026, пока не используется)
 
 Ядро, модули и DT подаются в сборку Android **готовыми** из нашего CI (как

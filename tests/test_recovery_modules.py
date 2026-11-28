@@ -64,8 +64,12 @@ class RecoveryModulesTest(unittest.TestCase):
         self.assertIn("BOARD_VENDOR_RAMDISK_KERNEL_MODULES += "
                       "$(addprefix $(KERNEL_PATH)/vendor_dlkm/,$(MONDRIAN_RECOVERY_DLKM))", board)
         self.assertIn("BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD += $(MONDRIAN_RECOVERY_DLKM)", board)
-        # Normal boot keeps its own first stage list and loads them from vendor_dlkm.
-        self.assertNotRegex(board, r"BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD \+=")
+        # Normal boot keeps its own first stage list and loads them from vendor_dlkm;
+        # the only addition to it is the sda15 log store of debug builds.
+        self.assertEqual(re.findall(r"BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD \+= (.*)", board),
+                         ["$(MONDRIAN_MTDOOPS_MODULES)"])
+        mtdoops = re.search(r"MONDRIAN_MTDOOPS_MODULES := (.*?)\n\S", board, re.S)[1].replace("\\", " ").split()
+        self.assertFalse(set(mtdoops) & set(ORDER))
 
     def test_no_insmod_of_them_in_the_recovery_rc(self):
         if COMMON is None:

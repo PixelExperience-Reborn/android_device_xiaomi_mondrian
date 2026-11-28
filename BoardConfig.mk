@@ -34,6 +34,22 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := \
 BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(KERNEL_PATH)/vendor_ramdisk/modules.load.recovery))
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(KERNEL_PATH)/vendor_ramdisk/modules.blocklist
+# Debug builds: Xiaomi's kernel log store on sda15. The bootloader puts
+# "block2mtd.block2mtd=/dev/block/sda15,2097152" and "mtdoops.mtddev=0
+# mtdoops.record_size=2097152 mtdoops.dump_oops=0" on the kernel command
+# line. Only first stage init applies command line options to modules
+# (toybox modprobe, which loads vendor_dlkm, does not), so stock gets these
+# records for recovery sessions only. Loaded in the normal first stage as
+# well, in the order the recovery sessions load them (mtd is pulled in first
+# as a dependency of ofpart there), a panic or a restart of a
+# userdebug/eng boot leaves its kernel log and pmsg in sda15 ("LAST KMSG",
+# "LAST LOGCAT") the way the recovery sessions already do. pm8941-pwrkey is a
+# dependency of mtdoops; all of them are in the vendor_boot ramdisk already.
+ifneq ($(TARGET_BUILD_VARIANT),user)
+MONDRIAN_MTDOOPS_MODULES := pm8941-pwrkey.ko mtd.ko ofpart.ko chipreg.ko block2mtd.ko \
+    mtd_blkdevs.ko mtdblock.ko mtdoops.ko
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD += $(MONDRIAN_MTDOOPS_MODULES)
+endif
 # Recovery also needs the audio/ADSP modules (battery status comes from the
 # ADSP), which the release ships for vendor_dlkm only: the stock recovery
 # insmods them in this order on early-init. They join the vendor_boot ramdisk

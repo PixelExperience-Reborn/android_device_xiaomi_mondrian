@@ -54,5 +54,40 @@ class KernelModulesTest(unittest.TestCase):
         self.assertFalse(first_stage & MIUI_ONLY)
 
 
+def mtdoops_list():
+    board = (ROOT / "BoardConfig.mk").read_text()
+    block = re.search(r"(?ms)^ifneq \(\$\(TARGET_BUILD_VARIANT\),user\)\nMONDRIAN_MTDOOPS_MODULES := (.*?)\n"
+                      r"BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD \+= \$\(MONDRIAN_MTDOOPS_MODULES\)\nendif", board)
+    return block.group(1).replace("\\", " ").split() if block else None
+
+
+class MtdoopsFirstStageTest(unittest.TestCase):
+    """Debug builds load Xiaomi's sda15 log store in the normal first stage."""
+
+    def test_debug_builds_only(self):
+        self.assertIsNotNone(mtdoops_list(), "MONDRIAN_MTDOOPS_MODULES must be added for non-user builds only")
+
+    @unittest.skipUnless((KERNEL / "vendor_ramdisk/modules.dep").is_file(), "needs the extracted stock kernel")
+    def test_modules_dependencies_and_order(self):
+        files = mtdoops_list()
+        ramdisk = KERNEL / "vendor_ramdisk"
+        for f in files:
+            self.assertTrue((ramdisk / f).is_file(), f)
+        deps = {}
+        for line in (ramdisk / "modules.dep").read_text().splitlines():
+            module, _, rest = line.partition(":")
+            deps[name(module)] = {name(d) for d in rest.split()}
+        listed = [name(f) for f in files]
+        for i, module in enumerate(listed):
+            with self.subTest(module=module):
+                self.assertLessEqual(deps[module], set(listed[:i]), "dependencies must load first")
+        recovery = {name(m) for m in (ramdisk / "modules.load.recovery").read_text().split()}
+        self.assertLessEqual(set(listed), recovery, "the recovery sessions load all of them")
+        normal = (ramdisk / "modules.load").read_text().split()
+        self.assertFalse(set(files) & set(normal), "not in the stock normal list yet")
+        for ufs in ("ufs_qcom.ko", "ufshcd-crypto-qti.ko"):
+            self.assertIn(ufs, normal, "block2mtd needs the UFS host loaded before it")
+
+
 if __name__ == "__main__":
     unittest.main()
